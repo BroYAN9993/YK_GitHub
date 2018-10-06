@@ -73,9 +73,43 @@ def partition(lyst, left, right):
     swap(lyst, boundary, right)
     return boundary
 
+def mergeSort(lyst):
+    copyBuffer = len(lyst) * [0]
+    mergeSortHelper(lyst, copyBuffer, 0, len(lyst) - 1)
+
+def mergeSortHelper(lyst, copyBuffer, low, high):
+    if low < high:
+        middle = (low + high) / 2
+        mergeSortHelper(lyst, copyBuffer, low, middle)
+        mergeSortHelper(lyst, copyBuffer, middle + 1, high)
+        merge(lyst, copyBuffer, low, middle, high)
+
+def merge(lyst, copyBuffer, low, middle, high):
+
+    #Initialize i1 and i2 to the first items in each sublist.
+    i1 = low
+    i2 = middle + 1
+
+    for i in range(low, high + 1):
+        if i1 > middle:
+            copyBuffer[i] = lyst[i2]
+            i2 += 1
+        elif i2 > high:
+            copyBuffer[i] = lyst[i1]
+            i1 += 1
+        elif lyst[i1] < lyst[i2]:
+            copyBuffer[i] = lyst[i1]
+            i1 += 1
+        else:
+            copyBuffer[i] = lyst[i2]
+            i2 += 1
+
+    for i in range(low, high + 1):
+        lyst[i] = copyBuffer[i]
+
 import random
 
-def main(size = 20, sort = quickSort):
+def main(size = 20, sort = mergeSort):
     lyst = []
     for count in range(size):
         lyst.append(random.randint(1, size + 1))
